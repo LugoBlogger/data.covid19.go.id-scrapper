@@ -117,7 +117,7 @@ def get_clean_data(filename, download_again=False):
                 "provinces_data": extract_provinces_data(soup_page)}
         print("Extraction finished.")
 
-        with open(path_to_file, "w") as f:
+        with open(filename, "w") as f:
             f.write(json.dumps(data, indent=2))
 
     else:
