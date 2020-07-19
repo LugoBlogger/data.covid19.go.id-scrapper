@@ -17,6 +17,10 @@ and flow of the program).
 
 ## Demo 
 
+<p align="center">
+<img src="https://github.com/LugoBlogger/web-scrapper/blob/master/web-scrapper.gif" width=50%>
+</p>
+
 ## Usage
 The program is self-contained with its documentation. We can get the information by typing in terminal
 
