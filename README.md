@@ -1,4 +1,4 @@
-# web-scrapping.py
+# web-scrapper.py
 This simple scrapper is created using Python to test a possibility to use `multiprocessing` and `threading` modules 
 for unrelated usage (depends on who we are, 😆).
 
