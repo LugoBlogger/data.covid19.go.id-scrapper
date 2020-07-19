@@ -8,20 +8,73 @@ import textwrap
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from pathlib import Path
+from threading import Thread
+from multiprocessing import Process, Manager
+
+
+class WorkerTask(object):
+    def __init__(self, queue_dict):
+        self.queue_dict = queue_dict
+
+
+    def worker(self):
+        base_site = "https://data.covid19.go.id/public/index.html"
+        
+        options = webdriver.ChromeOptions()
+        options.add_argument("headless")
+        driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver",
+                                  options=options)
+        driver.get(base_site)
+        
+        soup_page = BeautifulSoup(driver.page_source, parser="lxml",
+                                  features="lxml")
+
+        # multiprocessing.Manager() cannot handle complex data type 
+        # e.g: bs4.BeautifulSoup
+        # so we convert it to string (primitive data type)
+        self.queue_dict[0] = str(soup_page)
+        
+
+class ProgressTask(object):
+    def __init__(self):
+        self._running = True
+
+    
+    def terminate(self):
+        self._running = False
+
+
+    def print_point(self):
+        while self._running:
+            # Using print doesn't work in Ubuntu terminal
+            #print(".", end="")
+            sys.stdout.write(".")
+            sys.stdout.flush()
+            time.sleep(1)
 
 
 def get_page_covid19_go_id():
-    base_site = "https://data.covid19.go.id/public/index.html"
-    
-    options = webdriver.ChromeOptions()
-    options.add_argument("headless")
-    driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver",
-                              options=options)
-    driver.get(base_site)
-    
-    soup_page = BeautifulSoup(driver.page_source, parser="html5lib",
+    queue_dict = Manager().dict()
+    #print(queue_dict.values())
+
+    progress_ins = ProgressTask()
+    progress_proc = Thread(target=progress_ins.print_point)
+    progress_proc.start()
+
+    # signal termination
+    worker_ins = WorkerTask(queue_dict)
+    worker_proc = Process(target=worker_ins.worker)
+    worker_proc.start()
+    worker_proc.join()
+
+    if not worker_proc.is_alive():
+        progress_ins.terminate()
+        progress_proc.join()
+
+    # revert back soup_page to bs4.BeautifulSoup
+    soup_page = BeautifulSoup(queue_dict.values()[0], parser="lxml",
                               features="lxml")
-    
+
     return soup_page
 
 
@@ -55,14 +108,16 @@ def get_clean_data(filename, download_again=False):
 
     if not path_to_file.is_file() or download_again:
 
+        print("Start scrapping page of data.covid19.go.id/public/index.html")
         soup_page = get_page_covid19_go_id()
-        print("Scrapping data.covid19.go.id finished.")
+        print("\nScrapping data.covid19.go.id finished.")
+        
         data = {"time_stamp": extract_time_stamp(soup_page),
                 "headlines": extract_headlines(soup_page),
                 "provinces_data": extract_provinces_data(soup_page)}
         print("Extraction finished.")
 
-        with open(path_to_file, "w") as f:
+        with open(filename, "w") as f:
             f.write(json.dumps(data, indent=2))
 
     else:
