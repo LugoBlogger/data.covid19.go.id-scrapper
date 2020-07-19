@@ -1,6 +1,6 @@
 # web-scrapping.py
 This simple scrapper is created using Python to test a possibility to use `multiprocessing` and `threading` modules 
-for unrelated usage (depends on who you are, 😆).
+for unrelated usage (depends on who we are, 😆).
 
 When the prototyped program scrapped a dynamics web page using Selenium, there is no a verbose argument in `selenium.webdriver.Chrome`
 to let us know that the headless web browser is running or not. I prefer to run a program with minimalistic verbosity to make
