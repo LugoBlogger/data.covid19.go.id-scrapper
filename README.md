@@ -18,7 +18,7 @@ and flow of the program).
 ## Demo
 
 <p align="center">
-<img src="https://github.com/LugoBlogger/web-scrapper/blob/master/web-scrapper.gif" width=50%>
+<img src="https://github.com/LugoBlogger/web-scrapper/blob/master/web-scraper.gif" width=50%>
 </p>
 
 ## Usage
