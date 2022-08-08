@@ -10,8 +10,8 @@ sure that the program is running as I intended and also a little bit acknowledge
 And somehow, I thought that it was a great step to know how to run multiple methods in a single run.
 Then I decided to create an indicator, by printing a simple dot simultaneously running with the headless web browser.
 The two main source for my inspiration to speed-up building the code are
-coming from ![StackOverflow]("https://stackoverflow.com/questions/10415028/how-can-i-recover-the-return-value-of-a-function-passed-to-multiprocessing-proce").
-and ![GeeksforGeeks: Code #4]("https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/"). The code that I have written
+coming from [StackOverflow](https://stackoverflow.com/questions/10415028/how-can-i-recover-the-return-value-of-a-function-passed-to-multiprocessing-proce).
+and [GeeksforGeeks: Code #4](https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/). The code that I have written
 and that two main sources are very unrelated but the logical structure almost similar (with several modifications in data types
 and flow of the program).
 
